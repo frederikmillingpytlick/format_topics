@@ -42,4 +42,10 @@ class content extends content_base {
      */
     protected $hasaddsection = false;
 
+    public function export_for_template(\renderer_base $output) {
+        global $PAGE;
+        $PAGE->requires->js_call_amd('format_topics/import-jqueryui', 'init');
+
+        return parent::export_for_template($output);
+    }
 }
