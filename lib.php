@@ -114,6 +114,7 @@ class format_topics extends core_courseformat\base {
      */
     public function get_view_url($section, $options = []) {
         global $CFG;
+
         $course = $this->get_course();
         $url = new moodle_url('/course/view.php', ['id' => $course->id]);
 
@@ -137,8 +138,13 @@ class format_topics extends core_courseformat\base {
             } else {
                 $usercoursedisplay = $course->coursedisplay ?? COURSE_DISPLAY_SINGLEPAGE;
             }
-            if ($sectionno != 0 && $usercoursedisplay == COURSE_DISPLAY_MULTIPAGE) {
-                $url->param('section', $sectionno);
+            if ($usercoursedisplay == COURSE_DISPLAY_MULTIPAGE) {
+                $section = $this->get_section($sectionno);
+                if(!$section) {
+                    return $url;
+                }
+
+                $url->param('sectionid', $section->id);
             } else {
                 if (empty($CFG->linkcoursesections) && !empty($options['navigation'])) {
                     return null;
